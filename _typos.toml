@@ -1,0 +1,27 @@
+[default]
+# Extend `ignore` to skip additional files
+extend-ignore-re = [
+    # Skip files with binary content
+    "(?i)\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|tiff|exe|dll|so|dylib|bin|wasm)$",
+    # Skip lock files
+    "\\.lock$",
+]
+
+[default.extend-identifiers]
+# Extend the dictionary to accept additional identifiers
+tinify = "tinify"
+tinypng = "tinypng"
+jpeg = "jpeg"
+webp = "webp"
+avif = "avif"
+reqwest = "reqwest"
+tokio = "tokio"
+serde = "serde"
+thiserror = "thiserror"
+anyhow = "anyhow"
+
+[default.extend-words]
+# Extend the dictionary to accept additional words
+tinify = "tinify"
+tinypng = "tinypng"
+multipart = "multipart"

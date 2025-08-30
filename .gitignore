@@ -1,1 +1,48 @@
-/target
+# Rust artifacts
+/target/
+Cargo.lock
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS artifacts
+Thumbs.db
+.stfolder
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Test artifacts
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.avif
+*.gif
+*.bmp
+
+# Coverage reports
+lcov.info
+coverage/
+target/debug/deps/
+
+# Profiling
+perf.data*
+flamegraph.svg
+
+# Documentation build artifacts
+docs/book/
+
+# Local configuration
+.local/
+
+# Temporary files
+*.tmp
+*.temp

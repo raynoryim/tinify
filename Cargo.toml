@@ -2,15 +2,39 @@
 name = "tinify-rs"
 version = "0.1.0"
 edition = "2021"
-description = "Rust client for the Tinify API"
+description = "A high-performance Rust client for the Tinify API, providing image compression and optimization capabilities"
+authors = ["raynoryim"]
 license = "MIT"
+repository = "https://github.com/raynoryim/tinify-rs"
+homepage = "https://github.com/raynoryim/tinify-rs"
+documentation = "https://docs.rs/tinify-rs"
+readme = "README.md"
+keywords = ["tinify", "tinypng", "image", "compression", "optimization"]
+categories = ["multimedia::images", "api-bindings", "web-programming"]
+exclude = [
+    "docs/",
+    "scripts/",
+    "*.http",
+    "*.png",
+    "*.jpg",
+    "examples/*.png",
+    "examples/*.jpg",
+]
 
 [dependencies]
-reqwest = { version = "0.11", features = ["json", "multipart"] }
+reqwest = { version = "0.12", features = ["json", "multipart"] }
 tokio = { version = "1.0", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-thiserror = "1.0"
+thiserror = "2.0"
 anyhow = "1.0"
-base64 = "0.21"
+base64 = "0.22"
 url = "2.5"
+dotenvy = "0.15"
+
+# Force update to secure slab version
+slab = "0.4.11"
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = "3.8"

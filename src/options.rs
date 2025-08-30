@@ -15,26 +15,28 @@ pub enum ResizeMethod {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ResizeOptions {
     pub method: ResizeMethod,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub height: Option<u32>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ImageFormat {
-    #[serde(rename = "avif")]
+    #[serde(rename = "image/avif")]
     Avif,
-    #[serde(rename = "webp")]
+    #[serde(rename = "image/webp")]
     WebP,
-    #[serde(rename = "jpeg")]
+    #[serde(rename = "image/jpeg")]
     Jpeg,
-    #[serde(rename = "png")]
+    #[serde(rename = "image/png")]
     Png,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ConvertOptions {
     #[serde(rename = "type")]
-    pub format: Vec<ImageFormat>,
+    pub format: ImageFormat,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub background: Option<String>,
 }
