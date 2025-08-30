@@ -1,6 +1,6 @@
 use std::time::Duration;
 use tempfile::NamedTempFile;
-use tinify_rs::{RateLimit, ResizeMethod, ResizeOptions, RetryConfig, TinifyClient};
+use tinify_rs::{RateLimit, ResizeMethod, ResizeOptions, RetryConfig, Tinify};
 use tracing::info;
 
 #[tokio::main]
@@ -25,7 +25,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         burst_capacity: 15,
     };
 
-    let client = TinifyClient::builder()
+    let client = Tinify::builder()
         .api_key(std::env::var("TINIFY_API_KEY").unwrap_or("demo-key".to_string()))
         .app_identifier("TinifyDemo/2.0")
         .timeout(Duration::from_secs(60))
@@ -33,7 +33,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .rate_limit(rate_limit)
         .build()?;
 
-    info!("Created TinifyClient with enhanced configuration");
+    info!("Created Tinify client with enhanced configuration");
     println!("   ✅ Client created with custom configuration");
 
     // 2. Input validation examples
@@ -82,15 +82,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 3. Multi-client support (no global state)
     println!("\n3. 🌐 Multiple Client Instances");
-    let client1 = TinifyClient::new("api-key-1".to_string())?;
-    let client2 = TinifyClient::new("api-key-2".to_string())?;
+    let client1 = Tinify::new("api-key-1".to_string())?;
+    let client2 = Tinify::new("api-key-2".to_string())?;
 
     println!("   ✅ Client 1 API key: {}", client1.api_key());
     println!("   ✅ Client 2 API key: {}", client2.api_key());
 
     // 4. Enhanced error handling
     println!("\n4. ⚠️  Enhanced Error Handling");
-    match TinifyClient::builder().build() {
+    match Tinify::builder().build() {
         Err(tinify_rs::TinifyError::InvalidApiKey) => {
             println!("   ✅ Granular error: Missing API key detected");
         }
@@ -121,7 +121,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 6. Default configurations
     println!("\n6. 🔧 Default Configurations");
-    let _simple_client = TinifyClient::new("simple-key".to_string())?;
+    let _simple_client = Tinify::new("simple-key".to_string())?;
     println!("   ✅ Simple client created with defaults");
 
     let default_resize = ResizeOptions::default();
@@ -131,12 +131,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         default_resize.width.unwrap(),
         default_resize.height.unwrap()
     );
-
-    // 7. Deprecated API warnings
-    println!("\n7. 🚨 Migration Path");
-    println!("   ⚠️  Old API is deprecated but still functional");
-    println!("   ➡️  Migrate from: Tinify::set_key()");
-    println!("   ➡️  Migrate to:   TinifyClient::new()");
 
     println!("\n🎉 All improvements verified successfully!");
     println!("\n📈 Benefits Summary:");

@@ -38,9 +38,9 @@ impl Source {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::{TinifyClient, ResizeOptions, ResizeMethod};
+    /// use tinify_rs::{Tinify, ResizeOptions, ResizeMethod};
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
     ///
     /// let resize_options = ResizeOptions {
@@ -58,7 +58,7 @@ impl Source {
         info!("Resizing image at location: {}", self.location);
 
         // Validate resize options
-        crate::TinifyClient::validate_dimensions(options.width, options.height)?;
+        crate::Tinify::validate_dimensions(options.width, options.height)?;
 
         let body = serde_json::to_vec(&serde_json::json!({ "resize": options }))?;
         let response = self.client.post(&self.location, Some(body)).await?;
@@ -77,9 +77,9 @@ impl Source {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::{TinifyClient, ConvertOptions, ImageFormat};
+    /// use tinify_rs::{Tinify, ConvertOptions, ImageFormat};
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
     ///
     /// let convert_options = ConvertOptions {
@@ -112,9 +112,9 @@ impl Source {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::{TinifyClient, PreserveOptions, PreserveMetadata};
+    /// use tinify_rs::{Tinify, PreserveOptions, PreserveMetadata};
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.jpg").await?;
     ///
     /// let preserve_options = PreserveOptions {
@@ -152,9 +152,9 @@ impl Source {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::{TinifyClient, StoreOptions, S3Options};
+    /// use tinify_rs::{Tinify, StoreOptions, S3Options};
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.jpg").await?;
     ///
     /// let s3_options = S3Options {
@@ -190,9 +190,9 @@ impl Source {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::TinifyClient;
+    /// use tinify_rs::Tinify;
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
     ///
     /// let image_data = source.to_buffer().await?;
@@ -221,9 +221,9 @@ impl Source {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::TinifyClient;
+    /// use tinify_rs::Tinify;
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
     ///
     /// source.to_file("output.png").await?;

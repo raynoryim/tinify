@@ -5,7 +5,7 @@
 ## 功能展示
 
 ```rust
-use tinify_rs::{TinifyClient, RetryConfig, RateLimit, ResizeOptions, ResizeMethod};
+use tinify_rs::{Tinify, RetryConfig, RateLimit, ResizeOptions, ResizeMethod};
 use std::time::Duration;
 use tracing::info;
 
@@ -27,7 +27,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         burst_capacity: 15,
     };
 
-    let client = TinifyClient::builder()
+    let client = Tinify::builder()
         .api_key(std::env::var("TINIFY_API_KEY").unwrap_or("test-key".to_string()))
         .app_identifier("TinifyExample/2.0")
         .timeout(Duration::from_secs(60))
@@ -35,7 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .rate_limit(rate_limit)
         .build()?;
 
-    info!("Created TinifyClient with enhanced configuration");
+    info!("Created Tinify client with enhanced configuration");
 
     // 2. 输入验证示例
     match client.source_from_file("nonexistent.png").await {
@@ -85,14 +85,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("✓ 所有输入验证功能正常工作");
 
     // 7. 多客户端支持 (无全局状态)
-    let client1 = TinifyClient::new("key1".to_string())?;
-    let client2 = TinifyClient::new("key2".to_string())?;
+    let client1 = Tinify::new("key1".to_string())?;;
+    let client2 = Tinify::new("key2".to_string())?;;
 
     println!("✓ 多客户端实例支持: client1 key = {}, client2 key = {}",
              client1.api_key(), client2.api_key());
 
     // 8. 错误处理改进演示
-    match TinifyClient::builder().build() {
+    match Tinify::builder().build() {
         Err(tinify_rs::TinifyError::InvalidApiKey) => {
             println!("✓ 改进的错误处理: API 密钥缺失");
         },
@@ -124,8 +124,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 🆕 新特性
 
-- **TinifyClient**: 新的实例化客户端
-- **TinifyClientBuilder**: 灵活配置构建器
+- **Tinify**: 新的实例化客户端
+- **TinifyBuilder**: 灵活配置构建器
 - **RetryConfig**: 可配置重试策略
 - **RateLimit**: 速率限制配置
 - **增强错误类型**: 更详细的错误信息
@@ -133,8 +133,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 - **日志记录**: 操作可观测性
 - **流支持**: 大文件处理
 
-### 🔄 向后兼容性
+### 🎯 简洁API
 
-- 保留了旧的 `Tinify` 结构体（已标记为废弃）
-- 提供了清晰的迁移路径
-- 所有现有功能保持可用
+- 统一使用 `Tinify` 作为主要客户端结构体
+- 清晰直观的方法命名和组织
+- 减少API复杂性，提升开发体验

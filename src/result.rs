@@ -32,9 +32,9 @@ impl TinifyResult {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::TinifyClient;
+    /// use tinify_rs::Tinify;
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
     /// let mut result = source.resize(Default::default()).await?;
     ///
@@ -63,9 +63,9 @@ impl TinifyResult {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::TinifyClient;
+    /// use tinify_rs::Tinify;
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
     /// let mut result = source.resize(Default::default()).await?;
     ///

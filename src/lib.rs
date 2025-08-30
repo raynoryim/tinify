@@ -27,29 +27,29 @@ const SUPPORTED_FORMATS: &[&str] = &["png", "jpg", "jpeg", "webp"];
 
 /// Main Tinify client for image compression and optimization
 ///
-/// `TinifyClient` provides a high-level interface for the Tinify API with built-in
+/// `Tinify` provides a high-level interface for the Tinify API with built-in
 /// retry logic, rate limiting, input validation, and structured logging.
 ///
 /// # Examples
 ///
 /// ```no_run
-/// use tinify_rs::TinifyClient;
+/// use tinify_rs::Tinify;
 ///
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let client = TinifyClient::new("your-api-key".to_string())?;
+///     let client = Tinify::new("your-api-key".to_string())?;
 ///     let source = client.source_from_file("input.png").await?;
 ///     source.to_file("output.png").await?;
 ///     Ok(())
 /// }
 /// ```
 #[derive(Clone)]
-pub struct TinifyClient {
+pub struct Tinify {
     client: Arc<Client>,
 }
 
-impl TinifyClient {
-    /// Create a new TinifyClient with default configuration
+impl Tinify {
+    /// Create a new Tinify client with default configuration
     ///
     /// # Arguments
     ///
@@ -58,9 +58,9 @@ impl TinifyClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use tinify_rs::TinifyClient;
+    /// use tinify_rs::Tinify;
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// # Ok::<(), tinify_rs::TinifyError>(())
     /// ```
     pub fn new(api_key: String) -> Result<Self> {
@@ -70,12 +70,12 @@ impl TinifyClient {
         })
     }
 
-    /// Create a TinifyClient using the builder pattern
+    /// Create a Tinify client using the builder pattern
     ///
     /// # Examples
     ///
     /// ```no_run
-    /// use tinify_rs::{TinifyClient, RetryConfig, RateLimit};
+    /// use tinify_rs::{Tinify, RetryConfig, RateLimit};
     /// use std::time::Duration;
     ///
     /// let retry_config = RetryConfig {
@@ -85,7 +85,7 @@ impl TinifyClient {
     ///     backoff_factor: 2.0,
     /// };
     ///
-    /// let client = TinifyClient::builder()
+    /// let client = Tinify::builder()
     ///     .api_key("your-api-key")
     ///     .app_identifier("MyApp/1.0")
     ///     .timeout(Duration::from_secs(60))
@@ -94,8 +94,8 @@ impl TinifyClient {
     ///     .build()?;
     /// # Ok::<(), tinify_rs::TinifyError>(())
     /// ```
-    pub fn builder() -> TinifyClientBuilder {
-        TinifyClientBuilder::new()
+    pub fn builder() -> TinifyBuilder {
+        TinifyBuilder::new()
     }
 
     fn validate_image_format<P: AsRef<Path>>(path: P) -> Result<()> {
@@ -138,9 +138,9 @@ impl TinifyClient {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::TinifyClient;
+    /// use tinify_rs::Tinify;
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
     /// # Ok::<(), tinify_rs::TinifyError>(())
     /// # });
@@ -180,9 +180,9 @@ impl TinifyClient {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::TinifyClient;
+    /// use tinify_rs::Tinify;
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// let image_data = std::fs::read("input.png").unwrap();
     /// let source = client.source_from_buffer(image_data).await?;
     /// # Ok::<(), tinify_rs::TinifyError>(())
@@ -222,9 +222,9 @@ impl TinifyClient {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::TinifyClient;
+    /// use tinify_rs::Tinify;
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_url("https://example.com/image.jpg").await?;
     /// # Ok::<(), tinify_rs::TinifyError>(())
     /// # });
@@ -264,10 +264,10 @@ impl TinifyClient {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::TinifyClient;
+    /// use tinify_rs::Tinify;
     /// use tokio::fs::File;
     ///
-    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let client = Tinify::new("your-api-key".to_string())?;
     /// let file = File::open("input.png").await?;
     /// let source = client.source_from_stream(file, "image/png").await?;
     /// # Ok::<(), Box<dyn std::error::Error>>(())
@@ -311,11 +311,11 @@ impl TinifyClient {
     }
 }
 
-pub struct TinifyClientBuilder {
+pub struct TinifyBuilder {
     inner: ClientBuilder,
 }
 
-impl TinifyClientBuilder {
+impl TinifyBuilder {
     pub fn new() -> Self {
         Self {
             inner: ClientBuilder::new(),
@@ -357,92 +357,17 @@ impl TinifyClientBuilder {
         self
     }
 
-    pub fn build(self) -> Result<TinifyClient> {
+    pub fn build(self) -> Result<Tinify> {
         let client = self.inner.build()?;
-        Ok(TinifyClient {
+        Ok(Tinify {
             client: Arc::new(client),
         })
     }
 }
 
-impl Default for TinifyClientBuilder {
+impl Default for TinifyBuilder {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-/// Backwards compatibility - Legacy Tinify struct
-///
-/// This struct provides static methods for compatibility with the old API.
-/// New code should use TinifyClient instead.
-///
-/// # Migration
-///
-/// Old code:
-/// ```ignore
-/// Tinify::set_key("api-key".to_string()).await?;
-/// let source = Tinify::from_file("input.png").await?;
-/// ```
-///
-/// New code:
-/// ```ignore
-/// let client = TinifyClient::new("api-key".to_string())?;
-/// let source = client.source_from_file("input.png").await?;
-/// ```
-pub struct Tinify;
-
-impl Tinify {
-    /// Set the Tinify API key (deprecated)
-    ///
-    /// Use TinifyClient::new() instead for better error handling and configuration.
-    #[deprecated(since = "0.2.0", note = "Use TinifyClient::new() instead")]
-    pub async fn set_key(_api_key: String) -> Result<()> {
-        Err(TinifyError::UnknownError {
-            message: "Static methods are deprecated. Use TinifyClient::new() instead".to_string(),
-        })
-    }
-
-    /// Set the application identifier (deprecated)
-    #[deprecated(
-        since = "0.2.0",
-        note = "Use TinifyClient::builder().app_identifier() instead"
-    )]
-    pub async fn set_app_identifier(_app_identifier: String) -> Result<()> {
-        Err(TinifyError::UnknownError {
-            message: "Static methods are deprecated. Use TinifyClient::builder() instead"
-                .to_string(),
-        })
-    }
-
-    /// Create a Source object from a file (deprecated)
-    #[deprecated(since = "0.2.0", note = "Use TinifyClient::source_from_file() instead")]
-    pub async fn from_file<P: AsRef<Path>>(_path: P) -> Result<Source> {
-        Err(TinifyError::UnknownError {
-            message: "Static methods are deprecated. Use TinifyClient::source_from_file() instead"
-                .to_string(),
-        })
-    }
-
-    /// Create a Source object from image data in memory (deprecated)
-    #[deprecated(
-        since = "0.2.0",
-        note = "Use TinifyClient::source_from_buffer() instead"
-    )]
-    pub async fn from_buffer(_data: Vec<u8>) -> Result<Source> {
-        Err(TinifyError::UnknownError {
-            message:
-                "Static methods are deprecated. Use TinifyClient::source_from_buffer() instead"
-                    .to_string(),
-        })
-    }
-
-    /// Create a Source object from a URL (deprecated)
-    #[deprecated(since = "0.2.0", note = "Use TinifyClient::source_from_url() instead")]
-    pub async fn from_url<S: AsRef<str>>(_url: S) -> Result<Source> {
-        Err(TinifyError::UnknownError {
-            message: "Static methods are deprecated. Use TinifyClient::source_from_url() instead"
-                .to_string(),
-        })
     }
 }
 
@@ -465,7 +390,7 @@ mod tests {
     #[tokio::test]
     #[traced_test]
     async fn test_client_creation() {
-        let client = TinifyClient::new("test-api-key".to_string());
+        let client = Tinify::new("test-api-key".to_string());
         assert!(client.is_ok());
 
         let client = client.unwrap();
@@ -475,7 +400,7 @@ mod tests {
     #[tokio::test]
     #[traced_test]
     async fn test_client_builder() {
-        let client = TinifyClient::builder()
+        let client = Tinify::builder()
             .api_key("test-key")
             .app_identifier("TestApp/1.0")
             .max_retry_attempts(5)
@@ -488,14 +413,14 @@ mod tests {
     #[tokio::test]
     #[traced_test]
     async fn test_invalid_api_key() {
-        let result = TinifyClient::builder().build();
+        let result = Tinify::builder().build();
         assert!(matches!(result, Err(TinifyError::InvalidApiKey)));
     }
 
     #[tokio::test]
     #[traced_test]
     async fn test_file_not_found() {
-        let client = TinifyClient::new(get_test_api_key()).unwrap();
+        let client = Tinify::new(get_test_api_key()).unwrap();
         let result = client.source_from_file("nonexistent.png").await;
 
         assert!(matches!(result, Err(TinifyError::FileNotFound { .. })));
@@ -504,7 +429,7 @@ mod tests {
     #[tokio::test]
     #[traced_test]
     async fn test_unsupported_format() {
-        let client = TinifyClient::new(get_test_api_key()).unwrap();
+        let client = Tinify::new(get_test_api_key()).unwrap();
 
         let temp_file = NamedTempFile::with_suffix(".txt").unwrap();
         let result = client.source_from_file(temp_file.path()).await;
@@ -515,7 +440,7 @@ mod tests {
     #[tokio::test]
     #[traced_test]
     async fn test_buffer_too_large() {
-        let client = TinifyClient::new(get_test_api_key()).unwrap();
+        let client = Tinify::new(get_test_api_key()).unwrap();
         let large_buffer = vec![0u8; (MAX_FILE_SIZE + 1) as usize];
         let result = client.source_from_buffer(large_buffer).await;
 
@@ -525,7 +450,7 @@ mod tests {
     #[tokio::test]
     #[traced_test]
     async fn test_invalid_url() {
-        let client = TinifyClient::new(get_test_api_key()).unwrap();
+        let client = Tinify::new(get_test_api_key()).unwrap();
         let result = client.source_from_url("not-a-url").await;
 
         assert!(matches!(result, Err(TinifyError::UrlParseError(_))));
@@ -548,7 +473,7 @@ mod tests {
             return;
         }
 
-        let client = TinifyClient::new(api_key).unwrap();
+        let client = Tinify::new(api_key).unwrap();
         let result = client.source_from_file("./test_file.png").await;
 
         match &result {
@@ -557,16 +482,5 @@ mod tests {
         }
 
         // Don't assert for integration tests to avoid failures in CI
-    }
-
-    #[tokio::test]
-    #[traced_test]
-    #[allow(deprecated)]
-    async fn test_deprecated_methods() {
-        let result = Tinify::set_key("test".to_string()).await;
-        assert!(result.is_err());
-
-        let result = Tinify::from_file("test.png").await;
-        assert!(result.is_err());
     }
 }
