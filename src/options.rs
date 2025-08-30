@@ -21,6 +21,16 @@ pub struct ResizeOptions {
     pub height: Option<u32>,
 }
 
+impl Default for ResizeOptions {
+    fn default() -> Self {
+        Self {
+            method: ResizeMethod::Fit,
+            width: Some(100),
+            height: Some(100),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ImageFormat {
     #[serde(rename = "image/avif")]

@@ -1,7 +1,35 @@
+use std::path::PathBuf;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum TinifyError {
+    #[error("API key invalid or missing")]
+    InvalidApiKey,
+
+    #[error("Monthly quota exceeded")]
+    QuotaExceeded,
+
+    #[error("File too large: {size} bytes (max: {max_size} bytes)")]
+    FileTooLarge { size: u64, max_size: u64 },
+
+    #[error("Unsupported file format: {format}")]
+    UnsupportedFormat { format: String },
+
+    #[error("File not found: {path}")]
+    FileNotFound { path: PathBuf },
+
+    #[error("Rate limit exceeded, retry after {retry_after} seconds")]
+    RateLimitExceeded { retry_after: u64 },
+
+    #[error("Invalid resize dimensions: width={width:?}, height={height:?}")]
+    InvalidDimensions {
+        width: Option<u32>,
+        height: Option<u32>,
+    },
+
+    #[error("Client not initialized. Call TinifyClient::new() or use TinifyClientBuilder")]
+    ClientNotInitialized,
+
     #[error("Account error: {message}")]
     AccountError {
         message: String,

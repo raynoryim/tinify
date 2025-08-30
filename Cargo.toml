@@ -22,7 +22,7 @@ exclude = [
 ]
 
 [dependencies]
-reqwest = { version = "0.12", features = ["json", "multipart"] }
+reqwest = { version = "0.12", features = ["json", "multipart", "stream"] }
 tokio = { version = "1.0", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -31,6 +31,13 @@ anyhow = "1.0"
 base64 = "0.22"
 url = "2.5"
 dotenvy = "0.15"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+tokio-util = { version = "0.7", features = ["codec"] }
+futures-util = "0.3"
+mime = "0.3"
+governor = "0.6"
+nonzero_ext = "0.3"
 
 # Force update to secure slab version
 slab = "0.4.11"
@@ -38,3 +45,5 @@ slab = "0.4.11"
 [dev-dependencies]
 tokio-test = "0.4"
 tempfile = "3.8"
+mockito = "1.0"
+tracing-test = "0.2"

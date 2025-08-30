@@ -32,14 +32,15 @@ impl TinifyResult {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::Tinify;
+    /// use tinify_rs::TinifyClient;
     ///
-    /// Tinify::set_key("your-api-key".to_string()).await.unwrap();
-    /// let source = Tinify::from_file("input.png").await.unwrap();
-    /// let mut result = source.resize(Default::default()).await.unwrap();
+    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let source = client.source_from_file("input.png").await?;
+    /// let mut result = source.resize(Default::default()).await?;
     ///
-    /// let image_data = result.to_buffer().await.unwrap();
+    /// let image_data = result.to_buffer().await?;
     /// println!("Image size: {} bytes", image_data.len());
+    /// # Ok::<(), tinify_rs::TinifyError>(())
     /// # });
     /// ```
     pub async fn to_buffer(&mut self) -> Result<Vec<u8>> {
@@ -62,14 +63,15 @@ impl TinifyResult {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::Tinify;
+    /// use tinify_rs::TinifyClient;
     ///
-    /// Tinify::set_key("your-api-key".to_string()).await.unwrap();
-    /// let source = Tinify::from_file("input.png").await.unwrap();
-    /// let mut result = source.resize(Default::default()).await.unwrap();
+    /// let client = TinifyClient::new("your-api-key".to_string())?;
+    /// let source = client.source_from_file("input.png").await?;
+    /// let mut result = source.resize(Default::default()).await?;
     ///
-    /// result.to_file("output.png").await.unwrap();
+    /// result.to_file("output.png").await?;
     /// println!("Image saved to output.png");
+    /// # Ok::<(), tinify_rs::TinifyError>(())
     /// # });
     /// ```
     pub async fn to_file<P: AsRef<Path>>(&mut self, path: P) -> Result<()> {
