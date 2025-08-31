@@ -8,7 +8,7 @@ pub use client::{Client, ClientBuilder, RateLimit, RetryConfig};
 pub use error::{Result, TinifyError};
 pub use options::{
     ConvertOptions, GCSOptions, ImageFormat, PreserveMetadata, PreserveOptions, ResizeMethod,
-    ResizeOptions, S3Options, StoreOptions,
+    ResizeOptions, S3Options, StoreOptions, StoreRequest,
 };
 pub use result::TinifyResult;
 pub use source::Source;

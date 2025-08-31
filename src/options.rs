@@ -68,6 +68,7 @@ pub struct PreserveOptions {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct S3Options {
+    pub service: String, // Always "s3"
     pub aws_access_key_id: String,
     pub aws_secret_access_key: String,
     pub region: String,
@@ -78,19 +79,52 @@ pub struct S3Options {
     pub acl: Option<String>,
 }
 
+impl S3Options {
+    pub fn new(
+        aws_access_key_id: String,
+        aws_secret_access_key: String,
+        region: String,
+        path: String,
+    ) -> Self {
+        Self {
+            service: "s3".to_string(),
+            aws_access_key_id,
+            aws_secret_access_key,
+            region,
+            path,
+            headers: None,
+            acl: None,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GCSOptions {
+    pub service: String, // Always "gcs"
     pub gcp_access_token: String,
     pub path: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub headers: Option<serde_json::Value>,
 }
 
+impl GCSOptions {
+    pub fn new(gcp_access_token: String, path: String) -> Self {
+        Self {
+            service: "gcs".to_string(),
+            gcp_access_token,
+            path,
+            headers: None,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(tag = "service")]
 pub enum StoreOptions {
-    #[serde(rename = "s3")]
     S3(S3Options),
-    #[serde(rename = "gcs")]
     GCS(GCSOptions),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StoreRequest {
+    pub store: StoreOptions,
 }

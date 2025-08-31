@@ -177,7 +177,8 @@ impl Source {
             self.location
         );
 
-        let body = serde_json::to_vec(&options)?;
+        let store_request = crate::options::StoreRequest { store: options };
+        let body = serde_json::to_vec(&store_request)?;
         let response = self.client.post(&self.location, Some(body)).await?;
         Ok(TinifyResult::new(response))
     }

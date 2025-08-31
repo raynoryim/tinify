@@ -160,3 +160,14 @@ impl TinifyResult {
             .and_then(|s| s.parse().ok())
     }
 }
+
+impl From<TinifyResult> for Vec<u8> {
+    fn from(mut result: TinifyResult) -> Self {
+        // This is a blocking conversion - in real usage, you should use to_buffer().await
+        // This implementation is primarily for examples where we need synchronous conversion
+        tokio::task::block_in_place(|| {
+            tokio::runtime::Handle::current()
+                .block_on(async { result.to_buffer().await.unwrap_or_default() })
+        })
+    }
+}
