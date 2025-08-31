@@ -1,9 +1,9 @@
 use std::error::Error;
-use tinify_rs::Tinify;
+use tinify::Tinify;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("📈 Tinify-rs: Compression Count Example");
+    println!("📈 Tinify: Compression Count Example");
     println!("======================================");
 
     // Initialize client with API key
@@ -34,8 +34,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     // Try to get count from a new compression
                     let source2 = client.source_from_file("count_test.png").await?;
                     let mut result = source2
-                        .resize(tinify_rs::ResizeOptions {
-                            method: tinify_rs::ResizeMethod::Fit,
+                        .resize(tinify::ResizeOptions {
+                            method: tinify::ResizeMethod::Fit,
                             width: Some(100),
                             height: Some(100),
                         })
@@ -94,8 +94,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     }
                     "resize" => {
                         match source
-                            .resize(tinify_rs::ResizeOptions {
-                                method: tinify_rs::ResizeMethod::Scale,
+                            .resize(tinify::ResizeOptions {
+                                method: tinify::ResizeMethod::Scale,
                                 width: Some(150),
                                 height: None,
                             })
@@ -114,8 +114,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     }
                     "convert" => {
                         match source
-                            .convert(tinify_rs::ConvertOptions {
-                                format: tinify_rs::ImageFormat::Jpeg,
+                            .convert(tinify::ConvertOptions {
+                                format: tinify::ImageFormat::Jpeg,
                                 background: Some("#FFFFFF".to_string()),
                             })
                             .await
@@ -174,8 +174,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
         match client.source_from_file("count_test.png").await {
             Ok(source) => {
                 match source
-                    .resize(tinify_rs::ResizeOptions {
-                        method: tinify_rs::ResizeMethod::Fit,
+                    .resize(tinify::ResizeOptions {
+                        method: tinify::ResizeMethod::Fit,
                         width: Some(50 + i * 10),
                         height: Some(50 + i * 10),
                     })
@@ -229,8 +229,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
     match client.source_from_file("count_test.png").await {
         Ok(source) => {
             match source
-                .resize(tinify_rs::ResizeOptions {
-                    method: tinify_rs::ResizeMethod::Thumb,
+                .resize(tinify::ResizeOptions {
+                    method: tinify::ResizeMethod::Thumb,
                     width: Some(64),
                     height: Some(64),
                 })

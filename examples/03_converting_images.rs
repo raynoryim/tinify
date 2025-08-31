@@ -1,9 +1,9 @@
 use std::error::Error;
-use tinify_rs::{ConvertOptions, ImageFormat, Tinify};
+use tinify::{ConvertOptions, ImageFormat, Tinify};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("🔄 Tinify-rs: Converting Images Example");
+    println!("🔄 Tinify: Converting Images Example");
     println!("======================================");
 
     // Initialize client with API key

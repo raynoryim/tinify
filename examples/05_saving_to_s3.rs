@@ -1,10 +1,10 @@
 use serde_json::json;
 use std::error::Error;
-use tinify_rs::{S3Options, StoreOptions, Tinify};
+use tinify::{S3Options, StoreOptions, Tinify};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("📦 Tinify-rs: Saving to Amazon S3 Example");
+    println!("📦 Tinify: Saving to Amazon S3 Example");
     println!("========================================");
 
     // Initialize client with API key

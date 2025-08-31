@@ -1,6 +1,6 @@
 use std::time::Duration;
 use tempfile::NamedTempFile;
-use tinify_rs::{RateLimit, ResizeMethod, ResizeOptions, RetryConfig, Tinify};
+use tinify::{RateLimit, ResizeMethod, ResizeOptions, RetryConfig, Tinify};
 use tracing::info;
 
 #[tokio::main]
@@ -8,7 +8,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Initialize logging
     tracing_subscriber::fmt::init();
 
-    println!("🚀 Tinify-rs v0.2.0 Improvements Demo");
+    println!("🚀 Tinify v0.2.0 Improvements Demo");
     println!("=====================================\n");
 
     // 1. Builder pattern client creation
@@ -41,7 +41,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // File not found validation
     match client.source_from_file("nonexistent.png").await {
-        Err(tinify_rs::TinifyError::FileNotFound { path }) => {
+        Err(tinify::TinifyError::FileNotFound { path }) => {
             println!(
                 "   ✅ File not found validation: {:?}",
                 path.file_name().unwrap()
@@ -53,7 +53,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Format validation
     let temp_file = NamedTempFile::with_suffix(".txt")?;
     match client.source_from_file(temp_file.path()).await {
-        Err(tinify_rs::TinifyError::UnsupportedFormat { format }) => {
+        Err(tinify::TinifyError::UnsupportedFormat { format }) => {
             println!("   ✅ Unsupported format validation: {}", format);
         }
         _ => println!("   ❌ Format validation failed"),
@@ -62,7 +62,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Buffer size validation
     let large_buffer = vec![0u8; 6 * 1024 * 1024]; // 6MB
     match client.source_from_buffer(large_buffer).await {
-        Err(tinify_rs::TinifyError::FileTooLarge { size, max_size }) => {
+        Err(tinify::TinifyError::FileTooLarge { size, max_size }) => {
             println!(
                 "   ✅ File too large validation: {:.1}MB > {:.1}MB",
                 size as f64 / 1024.0 / 1024.0,
@@ -74,7 +74,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // URL validation
     match client.source_from_url("invalid-url").await {
-        Err(tinify_rs::TinifyError::UrlParseError(_)) => {
+        Err(tinify::TinifyError::UrlParseError(_)) => {
             println!("   ✅ URL format validation works");
         }
         _ => println!("   ❌ URL validation failed"),
@@ -91,7 +91,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 4. Enhanced error handling
     println!("\n4. ⚠️  Enhanced Error Handling");
     match Tinify::builder().build() {
-        Err(tinify_rs::TinifyError::InvalidApiKey) => {
+        Err(tinify::TinifyError::InvalidApiKey) => {
             println!("   ✅ Granular error: Missing API key detected");
         }
         _ => println!("   ❌ Error handling test failed"),

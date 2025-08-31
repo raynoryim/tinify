@@ -1,10 +1,10 @@
 use serde_json::json;
 use std::error::Error;
-use tinify_rs::{GCSOptions, StoreOptions, Tinify};
+use tinify::{GCSOptions, StoreOptions, Tinify};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("☁️  Tinify-rs: GCS Testing Guide");
+    println!("☁️  Tinify: GCS Testing Guide");
     println!("===============================");
     println!();
 
@@ -66,7 +66,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 path: "test-bucket-gcs/compressed-with-real-token.png".to_string(),
                 headers: Some(json!({
                     "Cache-Control": "public, max-age=3600",
-                    "X-Goog-Meta-Source": "tinify-rs-test",
+                    "X-Goog-Meta-Source": "tinify-test",
                     "X-Goog-Meta-Timestamp": chrono::Utc::now().to_rfc3339(),
                 })),
             };
@@ -141,7 +141,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 headers: Some(json!({
                     "X-Goog-Meta-Project": "my-project",
                     "X-Goog-Meta-Environment": "production",
-                    "X-Goog-Meta-Compressed-By": "tinify-rs"
+                    "X-Goog-Meta-Compressed-By": "tinify"
                 })),
             },
         ),
@@ -178,7 +178,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Test 6: Format Conversion + GCS
     println!("\n🎨 Test 6: Format Conversion + GCS (Simulation)");
 
-    use tinify_rs::{ConvertOptions, ImageFormat};
+    use tinify::{ConvertOptions, ImageFormat};
 
     let formats = vec![
         (ImageFormat::Jpeg, "jpg", "image/jpeg"),

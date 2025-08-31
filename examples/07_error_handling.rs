@@ -1,9 +1,9 @@
 use std::error::Error;
-use tinify_rs::{Tinify, TinifyError};
+use tinify::{Tinify, TinifyError};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("⚠️  Tinify-rs: Error Handling Example");
+    println!("⚠️  Tinify: Error Handling Example");
     println!("===================================");
 
     // Initialize client with API key
@@ -119,7 +119,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let source = client.source_from_file("resize_test.png").await?;
 
     // Try invalid resize dimensions
-    use tinify_rs::{ResizeMethod, ResizeOptions};
+    use tinify::{ResizeMethod, ResizeOptions};
     let invalid_resize = ResizeOptions {
         method: ResizeMethod::Fit,
         width: Some(0), // Invalid: zero width

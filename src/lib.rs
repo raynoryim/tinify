@@ -33,7 +33,7 @@ const SUPPORTED_FORMATS: &[&str] = &["png", "jpg", "jpeg", "webp"];
 /// # Examples
 ///
 /// ```no_run
-/// use tinify_rs::Tinify;
+/// use tinify::Tinify;
 ///
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -58,10 +58,10 @@ impl Tinify {
     /// # Examples
     ///
     /// ```no_run
-    /// use tinify_rs::Tinify;
+    /// use tinify::Tinify;
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// ```
     pub fn new(api_key: String) -> Result<Self> {
         let client = Client::new(api_key)?;
@@ -75,7 +75,7 @@ impl Tinify {
     /// # Examples
     ///
     /// ```no_run
-    /// use tinify_rs::{Tinify, RetryConfig, RateLimit};
+    /// use tinify::{Tinify, RetryConfig, RateLimit};
     /// use std::time::Duration;
     ///
     /// let retry_config = RetryConfig {
@@ -92,7 +92,7 @@ impl Tinify {
     ///     .retry_config(retry_config)
     ///     .requests_per_minute(200)
     ///     .build()?;
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// ```
     pub fn builder() -> TinifyBuilder {
         TinifyBuilder::new()
@@ -138,11 +138,11 @@ impl Tinify {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::Tinify;
+    /// use tinify::Tinify;
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// # });
     /// ```
     #[instrument(skip(self), fields(path = %path.as_ref().display()))]
@@ -180,12 +180,12 @@ impl Tinify {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::Tinify;
+    /// use tinify::Tinify;
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;
     /// let image_data = std::fs::read("input.png").unwrap();
     /// let source = client.source_from_buffer(image_data).await?;
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// # });
     /// ```
     #[instrument(skip(self, data), fields(data_size = data.len()))]
@@ -222,11 +222,11 @@ impl Tinify {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::Tinify;
+    /// use tinify::Tinify;
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_url("https://example.com/image.jpg").await?;
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// # });
     /// ```
     #[instrument(skip(self), fields(url = %url.as_ref()))]
@@ -264,7 +264,7 @@ impl Tinify {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::Tinify;
+    /// use tinify::Tinify;
     /// use tokio::fs::File;
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;

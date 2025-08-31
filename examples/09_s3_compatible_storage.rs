@@ -1,9 +1,9 @@
 use std::error::Error;
-use tinify_rs::{S3Options, StoreOptions, Tinify};
+use tinify::{S3Options, StoreOptions, Tinify};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("💾 Tinify-rs: S3 Compatible Storage Example");
+    println!("💾 Tinify: S3 Compatible Storage Example");
     println!("==========================================");
 
     // Initialize client with API key

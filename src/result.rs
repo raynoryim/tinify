@@ -32,7 +32,7 @@ impl TinifyResult {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::Tinify;
+    /// use tinify::Tinify;
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
@@ -40,7 +40,7 @@ impl TinifyResult {
     ///
     /// let image_data = result.to_buffer().await?;
     /// println!("Image size: {} bytes", image_data.len());
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// # });
     /// ```
     pub async fn to_buffer(&mut self) -> Result<Vec<u8>> {
@@ -63,7 +63,7 @@ impl TinifyResult {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::Tinify;
+    /// use tinify::Tinify;
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
@@ -71,7 +71,7 @@ impl TinifyResult {
     ///
     /// result.to_file("output.png").await?;
     /// println!("Image saved to output.png");
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// # });
     /// ```
     pub async fn to_file<P: AsRef<Path>>(&mut self, path: P) -> Result<()> {

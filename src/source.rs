@@ -38,7 +38,7 @@ impl Source {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::{Tinify, ResizeOptions, ResizeMethod};
+    /// use tinify::{Tinify, ResizeOptions, ResizeMethod};
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
@@ -50,7 +50,7 @@ impl Source {
     /// };
     ///
     /// let result = source.resize(resize_options).await?;
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// # });
     /// ```
     #[instrument(skip(self), fields(location = %self.location))]
@@ -77,7 +77,7 @@ impl Source {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::{Tinify, ConvertOptions, ImageFormat};
+    /// use tinify::{Tinify, ConvertOptions, ImageFormat};
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
@@ -88,7 +88,7 @@ impl Source {
     /// };
     ///
     /// let result = source.convert(convert_options).await?;
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// # });
     /// ```
     #[instrument(skip(self), fields(location = %self.location))]
@@ -112,7 +112,7 @@ impl Source {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::{Tinify, PreserveOptions, PreserveMetadata};
+    /// use tinify::{Tinify, PreserveOptions, PreserveMetadata};
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.jpg").await?;
@@ -125,7 +125,7 @@ impl Source {
     /// };
     ///
     /// let result = source.preserve(preserve_options).await?;
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// # });
     /// ```
     #[instrument(skip(self), fields(location = %self.location))]
@@ -152,7 +152,7 @@ impl Source {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::{Tinify, StoreOptions, S3Options};
+    /// use tinify::{Tinify, StoreOptions, S3Options};
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.jpg").await?;
@@ -168,7 +168,7 @@ impl Source {
     /// };
     ///
     /// let result = source.store(StoreOptions::S3(s3_options)).await?;
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// # });
     /// ```
     #[instrument(skip(self), fields(location = %self.location))]
@@ -192,14 +192,14 @@ impl Source {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::Tinify;
+    /// use tinify::Tinify;
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
     ///
     /// let image_data = source.to_buffer().await?;
     /// println!("Image size: {} bytes", image_data.len());
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// # });
     /// ```
     #[instrument(skip(self), fields(location = %self.location))]
@@ -223,14 +223,14 @@ impl Source {
     ///
     /// ```no_run
     /// # tokio_test::block_on(async {
-    /// use tinify_rs::Tinify;
+    /// use tinify::Tinify;
     ///
     /// let client = Tinify::new("your-api-key".to_string())?;
     /// let source = client.source_from_file("input.png").await?;
     ///
     /// source.to_file("output.png").await?;
     /// println!("Image saved to output.png");
-    /// # Ok::<(), tinify_rs::TinifyError>(())
+    /// # Ok::<(), tinify::TinifyError>(())
     /// # });
     /// ```
     #[instrument(skip(self), fields(location = %self.location, path = %path.as_ref().display()))]

@@ -1,10 +1,10 @@
 use serde_json::json;
 use std::error::Error;
-use tinify_rs::{S3Options, StoreOptions, Tinify};
+use tinify::{S3Options, StoreOptions, Tinify};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("🧪 Tinify-rs: S3 Testing with MinIO");
+    println!("🧪 Tinify: S3 Testing with MinIO");
     println!("===================================");
     println!();
 
@@ -71,7 +71,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let custom_headers = json!({
         "Cache-Control": "public, max-age=3600",
         "Content-Disposition": "inline; filename=\"optimized.png\"",
-        "X-Custom-Meta": "tinify-rs-test"
+        "X-Custom-Meta": "tinify-test"
     });
 
     let minio_headers_options = S3Options {
@@ -102,7 +102,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Test 3: Different formats to MinIO
     println!("\n🎨 Test 3: Format Conversion + MinIO Storage");
 
-    use tinify_rs::{ConvertOptions, ImageFormat};
+    use tinify::{ConvertOptions, ImageFormat};
 
     let formats = vec![
         (ImageFormat::Jpeg, "jpg", "image/jpeg"),
@@ -163,7 +163,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Test 4: Resize + MinIO Storage
     println!("\n📏 Test 4: Resize + MinIO Storage");
 
-    use tinify_rs::{ResizeMethod, ResizeOptions};
+    use tinify::{ResizeMethod, ResizeOptions};
 
     let resize_options = ResizeOptions {
         method: ResizeMethod::Fit,

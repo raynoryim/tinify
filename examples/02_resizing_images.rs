@@ -1,9 +1,9 @@
 use std::error::Error;
-use tinify_rs::{ResizeMethod, ResizeOptions, Tinify};
+use tinify::{ResizeMethod, ResizeOptions, Tinify};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("📏 Tinify-rs: Resizing Images Example");
+    println!("📏 Tinify: Resizing Images Example");
     println!("====================================");
 
     // Initialize client with API key

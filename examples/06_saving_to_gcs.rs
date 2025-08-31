@@ -1,10 +1,10 @@
 use serde_json::json;
 use std::error::Error;
-use tinify_rs::{GCSOptions, StoreOptions, Tinify};
+use tinify::{GCSOptions, StoreOptions, Tinify};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("☁️  Tinify-rs: Saving to Google Cloud Storage Example");
+    println!("☁️  Tinify: Saving to Google Cloud Storage Example");
     println!("==================================================");
 
     // Initialize client with API key
@@ -49,7 +49,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         "Cache-Control": "public, max-age=86400",
         "Content-Type": "image/png",
         "Content-Language": "en",
-        "X-Goog-Meta-Source": "tinify-rs-example"
+        "X-Goog-Meta-Source": "tinify-example"
     });
 
     let gcs_headers_options = GCSOptions {
@@ -201,7 +201,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // Example 7: Demonstrating different content types
     println!("\n🎨 Example 7: Different image formats to GCS");
-    use tinify_rs::{ConvertOptions, ImageFormat};
+    use tinify::{ConvertOptions, ImageFormat};
 
     let formats = vec![
         (ImageFormat::Png, "png", "image/png"),

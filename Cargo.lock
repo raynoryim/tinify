@@ -1577,8 +1577,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "tinify-rs"
-version = "0.3.0"
+name = "tinify"
+version = "0.1.0"
 dependencies = [
  "anyhow",
  "base64",

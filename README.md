@@ -1,7 +1,7 @@
-# Tinify-rs
+# Tinify
 
-[![Crates.io](https://img.shields.io/crates/v/tinify-rs.svg)](https://crates.io/crates/tinify-rs)
-[![Documentation](https://docs.rs/tinify-rs/badge.svg)](https://docs.rs/tinify-rs)
+[![Crates.io](https://img.shields.io/crates/v/tinify.svg)](https://crates.io/crates/tinify)
+[![Documentation](https://docs.rs/tinify/badge.svg)](https://docs.rs/tinify)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Build Status](https://github.com/raynoryim/tinify/workflows/CI/badge.svg)](https://github.com/raynoryim/tinify/actions)
 
@@ -27,7 +27,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-tinify-rs = "0.3.0"
+tinify = "0.1.0"
 tokio = { version = "1.0", features = ["full"] }
 ```
 
@@ -36,7 +36,7 @@ tokio = { version = "1.0", features = ["full"] }
 ### Basic Usage
 
 ```rust
-use tinify_rs::Tinify;
+use tinify::Tinify;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -55,7 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Advanced Configuration
 
 ```rust
-use tinify_rs::Tinify;
+use tinify::Tinify;
 use std::time::Duration;
 
 #[tokio::main]
@@ -81,7 +81,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Image Resizing
 
 ```rust
-use tinify_rs::{Tinify, ResizeOptions, ResizeMethod};
+use tinify::{Tinify, ResizeOptions, ResizeMethod};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -111,7 +111,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Format Conversion
 
 ```rust
-use tinify_rs::{Tinify, ConvertOptions, ImageFormat};
+use tinify::{Tinify, ConvertOptions, ImageFormat};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -134,7 +134,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Metadata Preservation
 
 ```rust
-use tinify_rs::{Tinify, PreserveOptions, PreserveMetadata};
+use tinify::{Tinify, PreserveOptions, PreserveMetadata};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -159,7 +159,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### AWS S3 Cloud Storage
 
 ```rust
-use tinify_rs::{Tinify, StoreOptions, S3Options};
+use tinify::{Tinify, StoreOptions, S3Options};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -191,7 +191,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Google Cloud Storage
 
 ```rust
-use tinify_rs::{Tinify, StoreOptions, GCSOptions};
+use tinify::{Tinify, StoreOptions, GCSOptions};
 use serde_json::json;
 
 #[tokio::main]
@@ -220,7 +220,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### URL-based Processing
 
 ```rust
-use tinify_rs::Tinify;
+use tinify::Tinify;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -237,7 +237,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Buffer-based Processing
 
 ```rust
-use tinify_rs::Tinify;
+use tinify::Tinify;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -288,7 +288,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 The library provides comprehensive error types:
 
 ```rust
-use tinify_rs::{Tinify, TinifyError};
+use tinify::{Tinify, TinifyError};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -328,7 +328,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Async Concurrent Processing
 
 ```rust
-use tinify_rs::Tinify;
+use tinify::Tinify;
 use tokio::task::JoinSet;
 
 #[tokio::main]
@@ -347,7 +347,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             let source = client.source_from_file(&file).await?;
             let output = format!("compressed_{}.png", i);
             source.to_file(&output).await?;
-            Ok::<String, tinify_rs::TinifyError>(output)
+            Ok::<String, tinify::TinifyError>(output)
         });
     }
 
@@ -367,7 +367,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Batch Processing
 
 ```rust
-use tinify_rs::{Tinify, ResizeOptions, ResizeMethod};
+use tinify::{Tinify, ResizeOptions, ResizeMethod};
 
 async fn batch_process_images(
     client: &Tinify,
@@ -399,7 +399,7 @@ async fn batch_process_images(
 ### AWS S3 Examples
 
 ```rust
-use tinify_rs::{Tinify, StoreOptions, S3Options};
+use tinify::{Tinify, StoreOptions, S3Options};
 use serde_json::json;
 
 // Basic S3 upload
@@ -487,7 +487,7 @@ cargo run --example 07_error_handling
 ## 🔍 API Quota Management
 
 ```rust
-use tinify_rs::Tinify;
+use tinify::Tinify;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -638,8 +638,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## 🔗 Related Links
 
-- **Documentation**: [docs.rs/tinify-rs](https://docs.rs/tinify-rs)
-- **Crates.io**: [crates.io/crates/tinify-rs](https://crates.io/crates/tinify-rs)
+- **Documentation**: [docs.rs/tinify](https://docs.rs/tinify)
+- **Crates.io**: [crates.io/crates/tinify](https://crates.io/crates/tinify)
 - **TinyPNG API**: [tinypng.com/developers](https://tinypng.com/developers)
 - **Issue Tracker**: [GitHub Issues](https://github.com/raynoryim/tinify/issues)
 

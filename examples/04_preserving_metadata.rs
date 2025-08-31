@@ -1,9 +1,9 @@
 use std::error::Error;
-use tinify_rs::{PreserveMetadata, PreserveOptions, Tinify};
+use tinify::{PreserveMetadata, PreserveOptions, Tinify};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("🏷️  Tinify-rs: Preserving Metadata Example");
+    println!("🏷️  Tinify: Preserving Metadata Example");
     println!("=========================================");
 
     // Initialize client with API key
@@ -130,7 +130,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // Example 6: Demonstrate metadata preservation with different formats
     println!("\n🔄 Example 6: Metadata preservation with format conversion");
-    use tinify_rs::{ConvertOptions, ImageFormat};
+    use tinify::{ConvertOptions, ImageFormat};
 
     let convert_options = ConvertOptions {
         format: ImageFormat::Png,

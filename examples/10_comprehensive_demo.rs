@@ -1,10 +1,10 @@
 use std::env;
 use std::error::Error;
-use tinify_rs::Tinify;
+use tinify::Tinify;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("🚀 Tinify-rs: Comprehensive API Demo");
+    println!("🚀 Tinify: Comprehensive API Demo");
     println!("===================================");
     println!();
 
@@ -17,7 +17,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Initialize client with enhanced configuration
     let client = Tinify::builder()
         .api_key(&api_key)
-        .app_identifier("TinifyRs-Demo/1.0")
+        .app_identifier("Tinify-Demo/1.0")
         .timeout(std::time::Duration::from_secs(30))
         .max_retry_attempts(3)
         .requests_per_minute(100)
@@ -25,7 +25,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     println!("✅ Tinify client initialized with enhanced configuration");
     println!("   📄 API Key: {}...", &api_key[..8]);
-    println!("   🏷️  App ID: TinifyRs-Demo/1.0");
+    println!("   🏷️  App ID: Tinify-Demo/1.0");
     println!("   ⏱️  Timeout: 30s");
     println!("   🔄 Max retries: 3");
     println!("   ⚡ Rate limit: 100 req/min");
@@ -68,7 +68,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("📋 DEMO 2: Image Resizing Operations");
     println!("───────────────────────────────────");
 
-    use tinify_rs::{ResizeMethod, ResizeOptions};
+    use tinify::{ResizeMethod, ResizeOptions};
 
     let resize_configs = vec![
         (ResizeMethod::Fit, Some(200), Some(200), "fit_200x200.png"),
@@ -120,7 +120,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("📋 DEMO 3: Format Conversion");
     println!("───────────────────────────");
 
-    use tinify_rs::{ConvertOptions, ImageFormat};
+    use tinify::{ConvertOptions, ImageFormat};
 
     let format_configs = vec![
         (
@@ -170,7 +170,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Create JPEG with metadata for this demo
     create_jpeg_with_metadata("demo_with_metadata.jpg").await?;
 
-    use tinify_rs::{PreserveMetadata, PreserveOptions};
+    use tinify::{PreserveMetadata, PreserveOptions};
 
     let preserve_options = PreserveOptions {
         preserve: vec![
@@ -200,7 +200,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("📋 DEMO 5: Cloud Storage Integration");
     println!("───────────────────────────────────");
 
-    use tinify_rs::{GCSOptions, S3Options, StoreOptions};
+    use tinify::{GCSOptions, S3Options, StoreOptions};
 
     // S3 demonstration
     let s3_options = S3Options {
@@ -322,7 +322,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     }
 
     println!();
-    println!("🚀 tinify-rs v0.3.0-dev Features Demonstrated:");
+    println!("🚀 tinify v0.1.0 Features Demonstrated:");
     println!("   ✅ Instance-based architecture (no global state)");
     println!("   ✅ Builder pattern configuration");
     println!("   ✅ Comprehensive error handling");

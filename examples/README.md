@@ -1,6 +1,6 @@
-# Tinify-rs Examples
+# Tinify Examples
 
-This directory contains comprehensive examples demonstrating all features of the `tinify-rs` library. All examples are designed to work with the provided API key and demonstrate production-ready usage patterns.
+This directory contains comprehensive examples demonstrating all features of the `tinify` library. All examples are designed to work with the provided API key and demonstrate production-ready usage patterns.
 
 ## Quick Start
 
@@ -258,7 +258,7 @@ GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account.json"
 ### Builder Pattern Configuration
 
 ```rust
-use tinify_rs::{Tinify, RetryConfig, RateLimit};
+use tinify::{Tinify, RetryConfig, RateLimit};
 use std::time::Duration;
 
 let retry_config = RetryConfig {
@@ -287,7 +287,7 @@ let client = Tinify::builder()
 ### Comprehensive Error Matching
 
 ```rust
-use tinify_rs::TinifyError;
+use tinify::TinifyError;
 
 match operation_result {
     Ok(result) => { /* handle success */ },
@@ -390,7 +390,7 @@ let gcs_options = GCSOptions {
     path: "images-bucket/compressed/image.png".to_string(),
     headers: Some(json!({
         "Cache-Control": "public, max-age=86400",
-        "X-Goog-Meta-Source": "tinify-rs",
+        "X-Goog-Meta-Source": "tinify",
         "X-Goog-Meta-Version": "1.0",
     })),
 };
@@ -454,4 +454,4 @@ After running the examples:
 4. **Testing**: Create comprehensive tests for your use cases
 5. **Optimization**: Fine-tune settings for your specific requirements
 
-These examples provide a complete foundation for using tinify-rs in production applications with all major features demonstrated and ready for customization.
+These examples provide a complete foundation for using tinify in production applications with all major features demonstrated and ready for customization.

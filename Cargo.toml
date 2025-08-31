@@ -1,6 +1,6 @@
 [package]
-name = "tinify-rs"
-version = "0.3.0"
+name = "tinify"
+version = "0.1.0"
 edition = "2021"
 description = "A high-performance Rust client for the Tinify API, providing image compression and optimization capabilities"
 authors = ["raynoryim"]

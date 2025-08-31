@@ -1,9 +1,9 @@
 use std::error::Error;
-use tinify_rs::{S3Options, StoreOptions, Tinify};
+use tinify::{S3Options, StoreOptions, Tinify};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("🧪 Tinify-rs: Real Image Testing");
+    println!("🧪 Tinify: Real Image Testing");
     println!("================================");
 
     // Test with provided API key
@@ -77,7 +77,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("\n🎨 Test 3: Format Conversion");
     match client.source_from_file("test_real_image.png").await {
         Ok(source) => {
-            use tinify_rs::{ConvertOptions, ImageFormat};
+            use tinify::{ConvertOptions, ImageFormat};
             let convert_options = ConvertOptions {
                 format: ImageFormat::Jpeg,
                 background: Some("#FFFFFF".to_string()),

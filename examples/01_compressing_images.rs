@@ -1,9 +1,9 @@
 use std::error::Error;
-use tinify_rs::Tinify;
+use tinify::Tinify;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("🗜️  Tinify-rs: Compressing Images Example");
+    println!("🗜️  Tinify: Compressing Images Example");
     println!("==========================================");
 
     // Initialize client with API key
