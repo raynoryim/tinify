@@ -3,7 +3,7 @@
 [![Crates.io](https://img.shields.io/crates/v/tinify-rs.svg)](https://crates.io/crates/tinify-rs)
 [![Documentation](https://docs.rs/tinify-rs/badge.svg)](https://docs.rs/tinify-rs)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Build Status](https://github.com/raynoryim/tinify-rs/workflows/CI/badge.svg)](https://github.com/raynoryim/tinify-rs/actions)
+[![Build Status](https://github.com/raynoryim/tinify/workflows/CI/badge.svg)](https://github.com/raynoryim/tinify/actions)
 
 **English** | [中文](README_CN.md)
 
@@ -604,7 +604,7 @@ We welcome contributions of all kinds!
 
 ```bash
 # Clone repository
-git clone https://github.com/raynoryim/tinify-rs.git
+git clone https://github.com/raynoryim/tinify.git
 cd tinify-rs
 
 # Install dependencies and run tests
@@ -630,7 +630,7 @@ cargo check --examples
 
 ### Reporting Issues
 
-Please report bugs or request features in [GitHub Issues](https://github.com/raynoryim/tinify-rs/issues).
+Please report bugs or request features in [GitHub Issues](https://github.com/raynoryim/tinify/issues).
 
 ## 📄 License
 
@@ -641,7 +641,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - **Documentation**: [docs.rs/tinify-rs](https://docs.rs/tinify-rs)
 - **Crates.io**: [crates.io/crates/tinify-rs](https://crates.io/crates/tinify-rs)
 - **TinyPNG API**: [tinypng.com/developers](https://tinypng.com/developers)
-- **Issue Tracker**: [GitHub Issues](https://github.com/raynoryim/tinify-rs/issues)
+- **Issue Tracker**: [GitHub Issues](https://github.com/raynoryim/tinify/issues)
 
 ## 🙏 Acknowledgments
 
