@@ -1,295 +1,654 @@
 # Tinify-rs
 
-一个用于图片压缩和优化的 Rust 库，基于 [TinyPNG API](https://tinypng.com/developers) 构建。
+[![Crates.io](https://img.shields.io/crates/v/tinify-rs.svg)](https://crates.io/crates/tinify-rs)
+[![Documentation](https://docs.rs/tinify-rs/badge.svg)](https://docs.rs/tinify-rs)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Build Status](https://github.com/raynoryim/tinify-rs/workflows/CI/badge.svg)](https://github.com/raynoryim/tinify-rs/actions)
 
-## 项目简介
+**English** | [中文](README_CN.md)
 
-Tinify-rs 是一个高性能的 Rust 库，提供了简单易用的 API 来压缩和优化图片。它支持多种图片格式，包括 PNG、JPEG、WebP 和 AVIF，并提供了丰富的图片处理功能，如调整大小、格式转换、元数据保留等。
+A high-performance Rust library for image compression and optimization, built on the [TinyPNG API](https://tinypng.com/developers). Provides async support, intelligent retry mechanisms, rate limiting, and cloud storage integration.
 
-## 主要功能
+## ✨ Features
 
-- 🖼️ **图片压缩**: 智能压缩图片，显著减小文件大小
-- 📏 **尺寸调整**: 支持多种调整方法（缩放、适应、覆盖、缩略图）
-- 🔄 **格式转换**: 在 PNG、JPEG、WebP、AVIF 之间转换
-- 📊 **元数据保留**: 可选择保留版权、创建时间、位置等元数据
-- ☁️ **云存储**: 支持直接保存到 AWS S3 和 Google Cloud Storage
-- 🚀 **异步支持**: 基于 tokio 的异步操作，高性能处理
-- 🛡️ **错误处理**: 完善的错误类型和错误处理机制
+- 🖼️ **Smart Compression**: Lossless quality PNG/JPEG/WebP/AVIF image compression
+- 📏 **Image Resizing**: Multiple resize methods (scale/fit/cover/thumb)
+- 🔄 **Format Conversion**: Convert between popular image formats
+- 📊 **Metadata Preservation**: Optionally preserve copyright, creation time, location data
+- ☁️ **Cloud Storage**: Direct upload to AWS S3, Google Cloud Storage
+- 🚀 **High-Performance Async**: Built on tokio for concurrent processing
+- 🛡️ **Type Safety**: Full Rust type system and comprehensive error handling
+- ⚡ **Smart Retry**: Built-in exponential backoff retry logic and rate limiting
+- 📦 **Zero Config**: Works out of the box with minimal setup
 
-## 安装
+## 📦 Installation
 
-在 `Cargo.toml` 中添加依赖：
+Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-tinify-rs = "0.1.0"
+tinify-rs = "0.3.0"
 tokio = { version = "1.0", features = ["full"] }
 ```
 
-## 快速开始
+## 🚀 Quick Start
 
-### 1. 设置 API Key
-
-首先需要在 [TinyPNG](https://tinypng.com/developers) 注册并获取 API key。
+### Basic Usage
 
 ```rust
 use tinify_rs::Tinify;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // 设置你的 API key
-    Tinify::set_key("your-api-key-here".to_string()).await?;
+    // Initialize client
+    let client = Tinify::new("your-api-key".to_string())?;
 
+    // Compress image
+    let source = client.source_from_file("input.png").await?;
+    source.to_file("output.png").await?;
+
+    println!("Image compression completed!");
     Ok(())
 }
 ```
 
-### 2. 基本使用
-
-#### 从文件压缩图片
+### Advanced Configuration
 
 ```rust
 use tinify_rs::Tinify;
+use std::time::Duration;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // 设置 API key
-    Tinify::set_key("your-api-key-here".to_string()).await?;
+    // Use builder pattern for advanced configuration
+    let client = Tinify::builder()
+        .api_key("your-api-key")
+        .app_identifier("MyApp/1.0")
+        .timeout(Duration::from_secs(30))
+        .max_retry_attempts(3)
+        .requests_per_minute(100)
+        .build()?;
 
-    // 从文件压缩图片
-    let source = Tinify::from_file("./input.png").await?;
-
-    // 保存压缩后的图片
-    source.to_file("./output.png").await?;
-
-    println!("图片压缩完成！");
-    Ok(())
-}
-```
-
-#### 从 URL 压缩图片
-
-```rust
-use tinify_rs::Tinify;
-
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    Tinify::set_key("your-api-key-here".to_string()).await?;
-
-    // 从 URL 压缩图片
-    let source = Tinify::from_url("https://example.com/image.jpg").await?;
-
-    // 保存到文件
-    source.to_file("./compressed.jpg").await?;
+    let source = client.source_from_file("input.png").await?;
+    source.to_file("output.png").await?;
 
     Ok(())
 }
 ```
 
-#### 调整图片尺寸
+## 📖 Detailed Examples
+
+### Image Resizing
 
 ```rust
 use tinify_rs::{Tinify, ResizeOptions, ResizeMethod};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    Tinify::set_key("your-api-key-here".to_string()).await?;
+    let client = Tinify::new("your-api-key".to_string())?;
+    let source = client.source_from_file("input.png").await?;
 
-    let source = Tinify::from_file("./input.png").await?;
-
-    // 创建调整选项
+    // Configure resize options
     let resize_options = ResizeOptions {
         method: ResizeMethod::Fit,
         width: Some(300),
         height: Some(200),
     };
 
-    // 调整尺寸并保存
+    // Resize image
     let mut result = source.resize(resize_options).await?;
-    result.to_file("./resized.png").await?;
+    result.to_file("resized.png").await?;
 
-    // 获取调整后的图片信息
+    // Get image information
     if let Some(width) = result.image_width() {
-        println!("调整后的宽度: {}", width);
-    }
-    if let Some(height) = result.image_height() {
-        println!("调整后的高度: {}", height);
+        println!("Resized width: {} pixels", width);
     }
 
     Ok(())
 }
 ```
 
-#### 格式转换
+### Format Conversion
 
 ```rust
 use tinify_rs::{Tinify, ConvertOptions, ImageFormat};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    Tinify::set_key("your-api-key-here".to_string()).await?;
+    let client = Tinify::new("your-api-key".to_string())?;
+    let source = client.source_from_file("input.png").await?;
 
-    let source = Tinify::from_file("./input.png").await?;
-
-    // 转换为 WebP 格式
+    // Convert to WebP format
     let convert_options = ConvertOptions {
-        format: vec![ImageFormat::WebP],
-        background: None,
+        format: ImageFormat::WebP,
+        background: Some("#FFFFFF".to_string()),
     };
 
     let mut result = source.convert(convert_options).await?;
-    result.to_file("./output.webp").await?;
+    result.to_file("output.webp").await?;
 
     Ok(())
 }
 ```
 
-#### 保留元数据
+### Metadata Preservation
 
 ```rust
 use tinify_rs::{Tinify, PreserveOptions, PreserveMetadata};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    Tinify::set_key("your-api-key-here".to_string()).await?;
+    let client = Tinify::new("your-api-key".to_string())?;
+    let source = client.source_from_file("input.jpg").await?;
 
-    let source = Tinify::from_file("./input.jpg").await?;
-
-    // 保留版权和位置信息
+    // Preserve copyright and creation time
     let preserve_options = PreserveOptions {
         preserve: vec![
             PreserveMetadata::Copyright,
-            PreserveMetadata::Location,
+            PreserveMetadata::Creation,
         ],
     };
 
     let mut result = source.preserve(preserve_options).await?;
-    result.to_file("./preserved.jpg").await?;
+    result.to_file("preserved.jpg").await?;
 
     Ok(())
 }
 ```
 
-#### 保存到云存储
+### AWS S3 Cloud Storage
 
 ```rust
 use tinify_rs::{Tinify, StoreOptions, S3Options};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    Tinify::set_key("your-api-key-here".to_string()).await?;
+    let client = Tinify::new("your-api-key".to_string())?;
+    let source = client.source_from_file("input.png").await?;
 
-    let source = Tinify::from_file("./input.png").await?;
-
-    // 配置 S3 存储选项
+    // Configure S3 storage options
     let s3_options = S3Options {
-        aws_access_key_id: "your-aws-key".to_string(),
-        aws_secret_access_key: "your-aws-secret".to_string(),
+        service: "s3".to_string(),
+        aws_access_key_id: "your-access-key".to_string(),
+        aws_secret_access_key: "your-secret-key".to_string(),
         region: "us-east-1".to_string(),
-        path: "images/compressed.png".to_string(),
+        path: "my-bucket/images/compressed.png".to_string(),
         headers: None,
         acl: Some("public-read".to_string()),
     };
 
-    let store_options = StoreOptions::S3(s3_options);
+    // Store directly to S3
+    let result = source.store(StoreOptions::S3(s3_options)).await?;
 
-    // 直接保存到 S3
-    let _result = source.store(store_options).await?;
+    if let Some(count) = result.compression_count() {
+        println!("API usage count: {}", count);
+    }
 
-    println!("图片已保存到 S3！");
     Ok(())
 }
 ```
 
-## API 参考
-
-### 核心类型
-
-#### `Tinify`
-
-主要的客户端类，提供静态方法进行图片处理。
-
-#### `Source`
-
-表示一个已上传的图片源，提供各种转换操作。
-
-#### `TinifyResult`
-
-表示转换操作的结果，包含压缩后的图片数据和元信息。
-
-### 调整方法
-
-- `ResizeMethod::Scale`: 按比例缩放
-- `ResizeMethod::Fit`: 适应指定尺寸，保持宽高比
-- `ResizeMethod::Cover`: 覆盖指定尺寸，可能裁剪
-- `ResizeMethod::Thumb`: 创建缩略图
-
-### 支持的格式
-
-- `ImageFormat::Png`: PNG 格式
-- `ImageFormat::Jpeg`: JPEG 格式
-- `ImageFormat::WebP`: WebP 格式
-- `ImageFormat::Avif`: AVIF 格式
-
-### 错误处理
-
-库提供了详细的错误类型：
+### Google Cloud Storage
 
 ```rust
-use tinify_rs::TinifyError;
+use tinify_rs::{Tinify, StoreOptions, GCSOptions};
+use serde_json::json;
 
-match result {
-    Ok(_) => println!("操作成功"),
-    Err(TinifyError::AccountError { message, .. }) => {
-        println!("账户错误: {}", message);
-    }
-    Err(TinifyError::ClientError { message, .. }) => {
-        println!("客户端错误: {}", message);
-    }
-    Err(TinifyError::ServerError { message, .. }) => {
-        println!("服务器错误: {}", message);
-    }
-    Err(e) => println!("其他错误: {:?}", e),
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Tinify::new("your-api-key".to_string())?;
+    let source = client.source_from_file("input.png").await?;
+
+    // Configure GCS storage options
+    let gcs_options = GCSOptions {
+        service: "gcs".to_string(),
+        gcp_access_token: "your-access-token".to_string(),
+        path: "my-bucket/images/compressed.png".to_string(),
+        headers: Some(json!({
+            "Cache-Control": "public, max-age=31536000",
+            "X-Goog-Meta-Source": "tinify-rs"
+        })),
+    };
+
+    // Store directly to GCS
+    let result = source.store(StoreOptions::GCS(gcs_options)).await?;
+
+    Ok(())
 }
 ```
 
-## 性能优化
-
-- 使用异步 I/O 操作，支持高并发处理
-- 智能的 HTTP 客户端复用
-- 最小化内存分配
-- 支持流式处理大文件
-
-## 限制和注意事项
-
-1. **API 限制**: TinyPNG 对免费账户有每月 500 次压缩的限制
-2. **文件大小**: 单个文件最大支持 5MB
-3. **并发限制**: 建议控制并发请求数量，避免触发 API 限制
-4. **网络依赖**: 需要稳定的网络连接
-
-## 示例项目
-
-查看 `src/lib.rs` 中的测试用例，了解更多使用示例：
+### URL-based Processing
 
 ```rust
-#[tokio::test]
-async fn test_from_file() {
-    Tinify::set_key("your-api-key".to_string()).await.unwrap();
-    let result = Tinify::from_file("./test_file.png").await;
-    assert!(result.is_ok());
+use tinify_rs::Tinify;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Tinify::new("your-api-key".to_string())?;
+
+    // Load image from URL
+    let source = client.source_from_url("https://example.com/image.jpg").await?;
+    source.to_file("compressed.jpg").await?;
+
+    Ok(())
 }
 ```
 
-## 贡献
+### Buffer-based Processing
 
-欢迎提交 Issue 和 Pull Request！
+```rust
+use tinify_rs::Tinify;
 
-## 许可证
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Tinify::new("your-api-key".to_string())?;
 
-本项目采用 MIT 许可证。详见 [LICENSE](LICENSE) 文件。
+    // Create source from in-memory bytes
+    let image_data = std::fs::read("input.png")?;
+    let source = client.source_from_buffer(image_data).await?;
 
-## 相关链接
+    // Get compressed bytes
+    let compressed_data = source.to_buffer().await?;
+    std::fs::write("output.png", compressed_data)?;
 
-- [TinyPNG API 文档](https://tinypng.com/developers)
-- [Rust 官方文档](https://doc.rust-lang.org/)
-- [Tokio 异步运行时](https://tokio.rs/)
+    Ok(())
+}
+```
+
+## 🔧 API Reference
+
+### Resize Methods
+
+| Method | Description | Use Case |
+|--------|-------------|----------|
+| `Scale` | Proportional scaling | Precise width or height control |
+| `Fit` | Fit within dimensions (preserve aspect ratio) | Create largest image within bounds |
+| `Cover` | Cover dimensions (may crop) | Fill exact dimensions, preserve ratio |
+| `Thumb` | Smart thumbnail | Auto-detect important regions |
+
+### Supported Image Formats
+
+| Format | Input Support | Output Support | Description |
+|--------|---------------|----------------|-------------|
+| PNG | ✅ | ✅ | Lossless compression, transparency support |
+| JPEG | ✅ | ✅ | Lossy compression, ideal for photos |
+| WebP | ✅ | ✅ | Modern format, smaller file sizes |
+| AVIF | ❌ | ✅ | Next-gen format, best compression |
+
+### Cloud Storage Support
+
+| Service | Support Status | Notes |
+|---------|----------------|--------|
+| AWS S3 | ✅ | Full support with custom headers and ACL |
+| Google Cloud Storage | ✅ | Full support with metadata |
+| S3-Compatible Services | ✅ | MinIO, DigitalOcean Spaces, Backblaze B2, etc. |
+
+## ⚠️ Error Handling
+
+The library provides comprehensive error types:
+
+```rust
+use tinify_rs::{Tinify, TinifyError};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Tinify::new("api-key".to_string())?;
+
+    match client.source_from_file("input.png").await {
+        Ok(source) => {
+            println!("Processing successful");
+            // Continue processing...
+        }
+        Err(TinifyError::FileNotFound { path }) => {
+            println!("File not found: {}", path);
+        }
+        Err(TinifyError::UnsupportedFormat { format }) => {
+            println!("Unsupported format: {}", format);
+        }
+        Err(TinifyError::FileTooLarge { size, max_size }) => {
+            println!("File too large: {} bytes (max: {} bytes)", size, max_size);
+        }
+        Err(TinifyError::QuotaExceeded) => {
+            println!("API quota exhausted");
+        }
+        Err(TinifyError::AccountError { status, message }) => {
+            println!("Account error [{}]: {}", status, message);
+        }
+        Err(e) => {
+            println!("Other error: {}", e);
+        }
+    }
+
+    Ok(())
+}
+```
+
+## 📊 Performance Optimization
+
+### Async Concurrent Processing
+
+```rust
+use tinify_rs::Tinify;
+use tokio::task::JoinSet;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Tinify::new("your-api-key".to_string())?;
+    let mut join_set = JoinSet::new();
+
+    // Process multiple images concurrently
+    let files = vec!["image1.png", "image2.jpg", "image3.webp"];
+
+    for (i, file) in files.iter().enumerate() {
+        let client = client.clone();
+        let file = file.to_string();
+
+        join_set.spawn(async move {
+            let source = client.source_from_file(&file).await?;
+            let output = format!("compressed_{}.png", i);
+            source.to_file(&output).await?;
+            Ok::<String, tinify_rs::TinifyError>(output)
+        });
+    }
+
+    // Wait for all tasks to complete
+    while let Some(result) = join_set.join_next().await {
+        match result {
+            Ok(Ok(filename)) => println!("✅ Compressed: {}", filename),
+            Ok(Err(e)) => println!("❌ Compression failed: {}", e),
+            Err(e) => println!("❌ Task error: {}", e),
+        }
+    }
+
+    Ok(())
+}
+```
+
+### Batch Processing
+
+```rust
+use tinify_rs::{Tinify, ResizeOptions, ResizeMethod};
+
+async fn batch_process_images(
+    client: &Tinify,
+    input_files: Vec<&str>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    for file in input_files {
+        // Compress and resize
+        let source = client.source_from_file(file).await?;
+
+        let resize_options = ResizeOptions {
+            method: ResizeMethod::Fit,
+            width: Some(800),
+            height: Some(600),
+        };
+
+        let mut result = source.resize(resize_options).await?;
+        let output = format!("processed_{}", file);
+        result.to_file(&output).await?;
+
+        println!("✅ Processed: {} -> {}", file, output);
+    }
+
+    Ok(())
+}
+```
+
+## 🌐 Cloud Storage Integration
+
+### AWS S3 Examples
+
+```rust
+use tinify_rs::{Tinify, StoreOptions, S3Options};
+use serde_json::json;
+
+// Basic S3 upload
+let s3_options = S3Options {
+    service: "s3".to_string(),
+    aws_access_key_id: "your-access-key".to_string(),
+    aws_secret_access_key: "your-secret-key".to_string(),
+    region: "us-east-1".to_string(),
+    path: "my-bucket/images/compressed.png".to_string(),
+    headers: None,
+    acl: Some("public-read".to_string()),
+};
+
+// S3 upload with custom headers
+let s3_options_with_headers = S3Options {
+    service: "s3".to_string(),
+    aws_access_key_id: "your-access-key".to_string(),
+    aws_secret_access_key: "your-secret-key".to_string(),
+    region: "us-east-1".to_string(),
+    path: "my-bucket/images/compressed.png".to_string(),
+    headers: Some(json!({
+        "Cache-Control": "public, max-age=31536000",
+        "Content-Disposition": "inline; filename=\"optimized.png\""
+    })),
+    acl: Some("public-read".to_string()),
+};
+
+let source = client.source_from_file("input.png").await?;
+let result = source.store(StoreOptions::S3(s3_options)).await?;
+```
+
+### S3-Compatible Storage
+
+Supports various S3-compatible storage services:
+
+- **MinIO**: Self-hosted object storage
+- **DigitalOcean Spaces**: Simple cloud storage
+- **Backblaze B2**: Affordable cloud storage
+- **Wasabi**: High-performance cloud storage
+
+```rust
+// MinIO configuration example
+let minio_options = S3Options {
+    service: "s3".to_string(),
+    aws_access_key_id: "minioadmin".to_string(),
+    aws_secret_access_key: "minioadmin".to_string(),
+    region: "us-east-1".to_string(),
+    path: "test-bucket/compressed.png".to_string(),
+    headers: None,
+    acl: None,
+};
+```
+
+## 🎯 Complete Feature Showcase
+
+Check out examples in the `examples/` directory:
+
+- `01_compressing_images.rs` - Basic image compression
+- `02_resizing_images.rs` - Image resizing operations
+- `03_converting_images.rs` - Format conversion
+- `04_preserving_metadata.rs` - Metadata preservation
+- `05_saving_to_s3.rs` - AWS S3 storage
+- `06_saving_to_gcs.rs` - Google Cloud Storage
+- `07_error_handling.rs` - Error handling patterns
+- `08_compression_count.rs` - Compression counter tracking
+- `09_s3_compatible_storage.rs` - S3-compatible services
+- `10_comprehensive_demo.rs` - Complete feature demonstration
+
+Run examples:
+
+```bash
+# Basic compression example
+cargo run --example 01_compressing_images
+
+# Cloud storage test
+export TINIFY_API_KEY="your-api-key"
+export AWS_ACCESS_KEY_ID="your-aws-key"
+export AWS_SECRET_ACCESS_KEY="your-aws-secret"
+cargo run --example 05_saving_to_s3
+
+# Error handling demonstration
+cargo run --example 07_error_handling
+```
+
+## 🔍 API Quota Management
+
+```rust
+use tinify_rs::Tinify;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Tinify::new("your-api-key".to_string())?;
+    let source = client.source_from_file("input.png").await?;
+    let result = source.to_buffer().await?;
+
+    // Check compression count
+    if let Some(count) = result.compression_count() {
+        println!("Current API usage: {}", count);
+
+        if count > 450 {
+            println!("⚠️ Approaching free quota limit (500/month)");
+        }
+    }
+
+    Ok(())
+}
+```
+
+## ⚙️ Environment Setup
+
+### Environment Variables
+
+```bash
+# Tinify API configuration
+export TINIFY_API_KEY="your-tinify-api-key"
+
+# AWS S3 configuration
+export AWS_ACCESS_KEY_ID="your-aws-access-key"
+export AWS_SECRET_ACCESS_KEY="your-aws-secret-key"
+
+# Google Cloud Storage configuration
+export GCP_ACCESS_TOKEN="your-gcp-access-token"
+export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account.json"
+```
+
+### Getting API Key
+
+1. Visit [TinyPNG Developer Page](https://tinypng.com/developers)
+2. Register account and verify email
+3. Get free API key (500 compressions/month)
+4. Upgrade to paid plan for higher quotas
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+cargo test
+
+# Run doc tests
+cargo test --doc
+
+# Run specific example
+cargo run --example 01_compressing_images
+
+# Test with real images
+cargo run --example test_real_image
+
+# Cloud storage integration tests
+./test_cloud_storage.sh
+```
+
+## 📋 System Requirements
+
+- **Rust**: 1.70.0 or higher
+- **Operating System**: Windows, macOS, Linux
+- **Network**: Stable internet connection for TinyPNG API access
+- **Memory**: Minimum 100MB available memory for image processing
+
+## 🚨 Limitations and Considerations
+
+### API Limitations
+
+- **Free Quota**: 500 compressions/month
+- **File Size**: Maximum 5MB per file
+- **Supported Formats**: PNG, JPEG, WebP (input), PNG, JPEG, WebP, AVIF (output)
+- **Concurrency**: Recommended max 10 concurrent requests
+
+### Best Practices
+
+1. **API Key Security**: Never hardcode API keys, use environment variables
+2. **Error Handling**: Always properly handle network and API errors
+3. **Quota Monitoring**: Regularly check API usage to avoid limits
+4. **File Validation**: Validate file format and size before upload
+5. **Concurrency Control**: Manage concurrent request count appropriately
+
+```rust
+// Recommended error handling pattern
+match client.source_from_file("input.png").await {
+    Ok(source) => {
+        // Successful processing
+    }
+    Err(TinifyError::QuotaExceeded) => {
+        // Quota exhausted, stop processing or wait for next month
+        eprintln!("API quota exhausted, wait for next month or upgrade plan");
+    }
+    Err(TinifyError::FileTooLarge { size, max_size }) => {
+        // File too large, consider preprocessing
+        eprintln!("File too large: {} bytes (max: {})", size, max_size);
+    }
+    Err(e) => {
+        // Other errors, log and possibly retry
+        eprintln!("Compression failed: {}", e);
+    }
+}
+```
+
+## 🤝 Contributing
+
+We welcome contributions of all kinds!
+
+### Development Setup
+
+```bash
+# Clone repository
+git clone https://github.com/raynoryim/tinify-rs.git
+cd tinify-rs
+
+# Install dependencies and run tests
+cargo test
+
+# Run clippy checks
+cargo clippy
+
+# Run formatting
+cargo fmt
+
+# Run all checks
+cargo check --examples
+```
+
+### Submitting PRs
+
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'feat: add amazing feature'`
+4. Push branch: `git push origin feature/amazing-feature`
+5. Create Pull Request
+
+### Reporting Issues
+
+Please report bugs or request features in [GitHub Issues](https://github.com/raynoryim/tinify-rs/issues).
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## 🔗 Related Links
+
+- **Documentation**: [docs.rs/tinify-rs](https://docs.rs/tinify-rs)
+- **Crates.io**: [crates.io/crates/tinify-rs](https://crates.io/crates/tinify-rs)
+- **TinyPNG API**: [tinypng.com/developers](https://tinypng.com/developers)
+- **Issue Tracker**: [GitHub Issues](https://github.com/raynoryim/tinify-rs/issues)
+
+## 🙏 Acknowledgments
+
+- [TinyPNG](https://tinypng.com/) for providing excellent image compression API
+- Rust community for amazing libraries and tools
+- All contributors and users for their support
+
+---
+
+⭐ If this project helps you, please give us a star!
