@@ -8,6 +8,10 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
+permissions:
+  contents: write
+  pull-requests: read
+
 jobs:
   publish:
     name: Publish to crates.io
