@@ -158,6 +158,7 @@ impl Source {
     /// let source = client.source_from_file("input.jpg").await?;
     ///
     /// let s3_options = S3Options {
+    ///     service: "s3".to_string(),
     ///     aws_access_key_id: "your-access-key".to_string(),
     ///     aws_secret_access_key: "your-secret-key".to_string(),
     ///     region: "us-east-1".to_string(),
